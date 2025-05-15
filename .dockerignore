@@ -1,0 +1,60 @@
+# 🔐 Environment files
+.env
+.env.*  
+
+# 🧪 Test and local config
+*.local
+*.test.*
+*.spec.*
+*.log
+
+# 📦 Dependency folders
+node_modules/
+venv/
+__pycache__/
+*.pyc
+
+# 💻 IDE/editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# 🗃️ OS & metadata
+.DS_Store
+Thumbs.db
+
+# 📂 Git & version control
+.git/
+.gitignore
+.gitattributes
+
+# 🐳 Docker-specific
+Dockerfile
+docker-compose.yml
+docker-compose*.yml
+
+# 📁 CI/CD
+Jenkinsfile
+.travis.yml
+.github/
+
+# ⚙️ Configs or secrets
+*.pem
+*.key
+*.crt
+*.bak
+*.old
+*~ 
+
+# 🛠️ Build artifacts
+dist/
+build/
+coverage/
+tmp/
+.cache/
+*.tar
+*.tgz
+*.zip
+*.gz
+*.rar
