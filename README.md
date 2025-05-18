@@ -11,9 +11,8 @@ This is a study-focused DevOps project designed to practice modern CI/CD practic
 │   ├── templates/
 │   ├── utils/
 │   └── config.py
-├── Dockerfile              # Containerization for 
+├── Dockerfile              # Containerization  
 ├── tests/
-the app
 ├── docker-compose.yml      # Dev environment setup
 ├── .env.example            # Environment variable 
 ├── Jenkinsfile             # CI/CD pipeline
@@ -78,11 +77,6 @@ Example scan results are logged during the CI process.
 | CI/CD       | Jenkins Secrets + .env.example |
 | Kubernetes  | To be implemented: K3s + Kubernetes Secrets or Sealed Secrets |
 
-## 📝 TODO
-
-- [ ] Improve production-level secret handling in K3s
-- [ ] Add Helm chart and deployment manifests
-- [ ] Finalize README with deployment steps
 
 ---
 
