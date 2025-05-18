@@ -2,7 +2,8 @@ import os
 from dotenv import load_dotenv
 import mysql.connector
 
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), ".env.local"))
+root_env = os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env")
+load_dotenv(dotenv_path=root_env)
 
 class Config:
     SECRET_KEY = os.getenv("SECURE_KEY", "fixed-key-USE_ONLY_IN_DEV_ENV")
