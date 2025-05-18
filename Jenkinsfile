@@ -28,7 +28,13 @@ pipeline {
                     docker run --rm \
                     -v /var/run/docker.sock:/var/run/docker.sock \
                     aquasec/trivy:latest image --exit-code 1 --severity HIGH,CRITICAL hitibash/devops-demo:latest || true
-                    '''
+                    
+                    
+                    docker run --rm \
+                    -v $(pwd):/src \
+                    aquasec/trivy:latest fs --scanners secret /src || true
+            '''
+                    
                 }
             }
         }
