@@ -1,84 +1,91 @@
-# To-Do App (Flask + MySQL)
+# DevOps Demo Project
 
-This is a simple To-Do web application built with Flask and MySQL.
+This is a study-focused DevOps project designed to practice modern CI/CD practices, Docker, security scanning, and secret handling workflows. The setup is optimized for local development and learning purposes.
 
-## Features
-
-- User registration and login
-- Admin dashboard with user and task overview
-- Create, update, delete tasks
-- View completed and pending tasks
-
-## Prerequisites
-
-- Python 3.8+
-- MySQL Server
-
-## Setup Instructions
-
-1. **Clone the Repository**
-
-```bash
-git clone https://github.com/yourusername/your-repo.git
-cd your-repo
-```
-
-2. **Create a Virtual Environment**
-
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. **Install Dependencies**
-
-```bash
-pip install -r requirements.txt
-```
-
-4. **Set up the Database**
-
-- Create a MySQL database.
-- Run the SQL script in the `sql/create_tables.sql` file to create tables.
-
-5. **Configure Environment Variables**
-
-Create a `.env` file in the root directory and add your DB credentials:
+## 📁 Project Structure
 
 ```
-DB_HOST=localhost
-DB_USER=yourusername
-DB_PASSWORD=yourpassword
-DB_NAME=yourdatabasename
-SECRET_KEY=your_secret_key
-```
-
-6. **Run the App**
-
-```bash
-python app.py
-```
-
-Visit `http://localhost:5000` in your browser.
-
----
-
-## Folder Structure
-
-```
-├── app/
+├── app/                    # Flask app source code
 │   ├── routes/
 │   ├── services/
 │   ├── templates/
 │   ├── utils/
 │   └── config.py
-│   └──.env
+├── Dockerfile              # Containerization for 
 ├── tests/
-├── sql/
-│   └── create_tables.sql
-├── .gitignore
-├── requirements.txt
-├── app.py
-├── pytest.ini
-└── README.md
+the app
+├── docker-compose.yml      # Dev environment setup
+├── .env.example            # Environment variable 
+├── Jenkinsfile             # CI/CD pipeline
+└── sql/                    # MySQL initialization scripts
 ```
+
+## 🚀 Features
+
+- Dockerized Flask app with MySQL
+- Jenkins pipeline with:
+  - Docker image build and tagging
+  - Trivy vulnerability and secret scanning
+  - DockerHub push using Jenkins secrets
+- Trivy used to scan for:
+  - Vulnerabilities (HIGH/CRITICAL)
+  - Leaked secrets in source code
+- `.env` file usage for local secrets
+- `.env.example` provided for reproducibility
+
+## 🛠 Usage
+
+### Development
+
+1. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Run using Docker Compose:
+   ```bash
+   docker-compose up --build
+   ```
+
+> 🔐 **Note**: Secrets in `.env` are only used for local/dev purposes. Never commit real credentials.
+
+### CI/CD
+
+- CI pipeline is configured in the `Jenkinsfile`.
+- DockerHub credentials are securely handled in Jenkins using `dockerhub-creds`.
+- Vulnerability scanning fails the pipeline **only in production**, currently skipped using `|| true` for learning purposes.
+
+## 📦 Image Tags
+
+- `latest` - latest successful build
+- `\$BUILD_NUMBER` - Jenkins build number tag
+
+## 🧪 Trivy Security Scans
+
+This project uses [Trivy](https://github.com/aquasecurity/trivy) to detect:
+
+- OS/package vulnerabilities (Debian base)
+- Python package vulnerabilities
+- Secrets in the source code
+
+Example scan results are logged during the CI process.
+
+## 🔐 Secret Handling (Dev vs Prod)
+
+| Context     | Method                     |
+|-------------|----------------------------|
+| Dev         | `.env` file (excluded from Git) |
+| CI/CD       | Jenkins Secrets + .env.example |
+| Kubernetes  | To be implemented: K3s + Kubernetes Secrets or Sealed Secrets |
+
+## 📝 TODO
+
+- [ ] Improve production-level secret handling in K3s
+- [ ] Add Helm chart and deployment manifests
+- [ ] Finalize README with deployment steps
+
+---
+
+> 🧠 This project is **not** intended for production but serves as a **learning tool** for DevOps workflows.
+
+---

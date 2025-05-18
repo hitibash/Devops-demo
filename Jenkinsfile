@@ -21,6 +21,16 @@ pipeline {
             }
         }
 
+        stage('Run Tests') {
+            steps {
+                script {
+                    docker.image("${IMAGE_NAME}:latest").inside {
+                        sh 'pytest tests/ --maxfail=1 --disable-warnings -q'
+                    }
+                }
+            }   
+        }
+
         stage('Trivy Scan') {
             steps {
                 script {
@@ -32,7 +42,7 @@ pipeline {
                     
                     docker run --rm \
                     -v $(pwd):/src \
-                    aquasec/trivy:latest fs --scanners secret /src || true
+                    aquasec/trivy:latest fs --scanners secret /src 
             '''
                     
                 }
