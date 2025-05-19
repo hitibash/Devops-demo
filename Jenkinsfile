@@ -26,17 +26,21 @@ pipeline {
                 withCredentials([file(credentialsId: 'env-secret', variable: 'ENV_FILE')]) {
                     sh '''
                         echo "[INFO] Copying .env file from Jenkins secret..."
-                        cp "$ENV_FILE" .env || (echo "[ERROR] Failed to copy .env"; exit 1)
+                        if ! cp "$ENV_FILE" .env; then
+                            echo "[ERROR] Could not copy .env"; exit 1
+                        fi
 
-                        echo "[INFO] Listing files in workspace:"
+                        echo "[INFO] Listing files:"
                         ls -la
 
-                        echo "[INFO] Giving executable permission to run_tests.sh"
-                        chmod +x run_tests.sh
+                        echo "[INFO] Making run_tests.sh executable..."
+                        chmod +x run_tests.sh || (echo "[ERROR] chmod failed"; exit 1)
 
-                        echo "[INFO] Running tests..."
-                        ./run_tests.sh
+                        echo "[INFO] Running run_tests.sh"
+                        ./run_tests.sh || (echo "[ERROR] Tests failed"; exit 1)
                     '''
+                    }
+
                 }
             }
         }
