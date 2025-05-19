@@ -23,11 +23,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                script {
-                    docker.image("${IMAGE_NAME}:latest").inside {
-                        sh 'pytest tests/ --maxfail=1 --disable-warnings -q'
-                    }
-                }
+                sh './run_tests.sh'
             }   
         }
 

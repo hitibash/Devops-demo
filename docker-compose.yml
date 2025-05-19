@@ -8,6 +8,9 @@ services:
     depends_on:
       - db
     restart: unless-stopped
+    volumes:
+      - .:/app
+    working_dir: /app
 
   db:
     image: mysql:8.0
@@ -18,3 +21,8 @@ services:
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
