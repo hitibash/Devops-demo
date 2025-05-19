@@ -21,17 +21,26 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+       stage('Run Tests') {
             steps {
-                withCredentials([file(credentialsId: '', variable: 'ENV_FILE')]) {
+                withCredentials([file(credentialsId: 'env-secret', variable: 'ENV_FILE')]) {
                     sh '''
-                        cp "$ENV_FILE" .env
+                        echo "[INFO] Copying .env file from Jenkins secret..."
+                        cp "$ENV_FILE" .env || (echo "[ERROR] Failed to copy .env"; exit 1)
+
+                        echo "[INFO] Listing files in workspace:"
+                        ls -la
+
+                        echo "[INFO] Giving executable permission to run_tests.sh"
                         chmod +x run_tests.sh
+
+                        echo "[INFO] Running tests..."
                         ./run_tests.sh
                     '''
                 }
             }
         }
+
 
         stage('Trivy Scan') {
             steps {
