@@ -8,6 +8,7 @@ docker compose down -v
 echo "[SYSTEM]: Starting containers..."
 docker compose up -d --build
 
+
 timeout=60
 until docker inspect --format='{{json .State.Health.Status}}' mysql_todo | grep -q '"healthy"' || [ $timeout -eq 0 ]; do
   echo "[SYSTEM]: Waiting for MySQL to become healthy... ($timeout seconds left)"

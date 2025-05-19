@@ -7,6 +7,12 @@ pipeline {
     }
 
     stages {
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        
         stage('Checkout') {
             steps {
                 git branch: 'master', url: 'https://github.com/hitibash/Devops-demo.git'
@@ -25,7 +31,6 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'ENV_DB_CRED', variable: 'ENV_FILE')]) {
                     sh '''
-                        echo "[INFO] Copying .env file from Jenkins secret..."
                         if ! cp "$ENV_FILE" .env; then
                             echo "[ERROR] Could not copy .env"; exit 1
                         fi
