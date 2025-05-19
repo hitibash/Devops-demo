@@ -23,7 +23,7 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                withCredentials([file(credentialsId: 'env-secret', variable: 'ENV_FILE')]) {
+                withCredentials([file(credentialsId: 'ENC_DB_CRED', variable: 'ENV_FILE')]) {
                     sh '''
                         echo "[INFO] Copying .env file from Jenkins secret..."
                         if ! cp "$ENV_FILE" .env; then
