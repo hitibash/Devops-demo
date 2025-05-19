@@ -21,7 +21,7 @@ pipeline {
             }
         }
 
-       stage('Run Tests') {
+        stage('Run Tests') {
             steps {
                 withCredentials([file(credentialsId: 'env-secret', variable: 'ENV_FILE')]) {
                     sh '''
@@ -39,12 +39,9 @@ pipeline {
                         echo "[INFO] Running run_tests.sh"
                         ./run_tests.sh || (echo "[ERROR] Tests failed"; exit 1)
                     '''
-                    }
-
                 }
             }
         }
-
 
         stage('Trivy Scan') {
             steps {
