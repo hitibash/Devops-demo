@@ -1,11 +1,23 @@
 services:
   web:
-    image: hitibash/devops-demo:latest
+    build: .
+    env_file: .env
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: pytest 
 
+    
   db:
     image: mysql:8.0
-    container_name: mysql_todo
     env_file: .env
+    ports:
+      - "${DB_PORT}:3306"
     volumes:
       - ./sql:/docker-entrypoint-initdb.d
     restart: unless-stopped

@@ -31,18 +31,9 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'ENV_DB_CRED', variable: 'ENV_FILE')]) {
                     sh '''
-                        if ! cp "$ENV_FILE" .env; then
-                            echo "[ERROR] Could not copy .env"; exit 1
-                        fi
-
-                        echo "[INFO] Listing files:"
-                        ls -la
-
-                        echo "[INFO] Making run_tests.sh executable..."
-                        chmod +x run_tests.sh || (echo "[ERROR] chmod failed"; exit 1)
-
-                        echo "[INFO] Running run_tests.sh"
-                        ./run_tests.sh || (echo "[ERROR] Tests failed"; exit 1)
+                        cp "$ENV_FILE" .env || exit 1
+                        docker compose -f docker-compose.yml -f docker-compose.test.yml up --build --abort-on-container-exit --exit-code-from web
+                        docker compose down -v
                     '''
                 }
             }
@@ -52,15 +43,13 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        echo "[SYSTEM]: Running Trivy image scan..."
                         docker run --rm \
-                        -v /var/run/docker.sock:/var/run/docker.sock \
-                        aquasec/trivy:latest image --exit-code 1 --severity HIGH,CRITICAL ${IMAGE_NAME}:latest || true
+                            -v /var/run/docker.sock:/var/run/docker.sock \
+                            aquasec/trivy:latest image --exit-code 1 --severity HIGH,CRITICAL ${IMAGE_NAME}:latest || true
 
-                        echo "[SYSTEM]: Running Trivy secret scan..."
                         docker run --rm \
-                        -v $(pwd):/src \
-                        aquasec/trivy:latest fs --scanners secret /src
+                            -v $(pwd):/src \
+                            aquasec/trivy:latest fs --scanners secret /src
                     '''
                 }
             }
@@ -76,7 +65,6 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${DOCKER_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
-                        echo "[SYSTEM]: Pushing Docker image to DockerHub..."
                         echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
                         docker push ${IMAGE_NAME}:${BUILD_NUMBER}
                         docker push ${IMAGE_NAME}:latest
