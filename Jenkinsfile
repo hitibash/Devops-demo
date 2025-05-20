@@ -23,6 +23,12 @@ pipeline {
             }
         }
 
+        stage('Docker Cleanup') {
+            steps {
+                sh 'docker compose down --volumes --remove-orphans || true'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
