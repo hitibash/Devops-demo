@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    options {
+        skipDefaultCheckout()
+    }
+    
     environment {
         IMAGE_NAME = "hitibash/devops-demo"
         DOCKER_CREDENTIALS_ID = 'dockerhub-creds'
@@ -32,6 +36,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'ENV_DB_CRED', variable: 'ENV_FILE')]) {
                     sh '''
                         cp "$ENV_FILE" .env || exit 1
+                        chmod +x service-healthy.sh
                         docker compose up --build --abort-on-container-exit --exit-code-from web
                         docker compose down -v
                     '''
