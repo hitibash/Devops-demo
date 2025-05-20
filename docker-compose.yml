@@ -6,14 +6,21 @@ services:
       - "5000:5000"
     depends_on:
       - db
-    restart: no
+    volumes:
+      - .:/app
+    working_dir: /app
+
+  test:
+    build: .
+    env_file: .env
+    depends_on:
+      - db
     volumes:
       - .:/app
     working_dir: /app
     command: python run-tests.py
+    restart: "no"
 
-
-    
   db:
     image: mysql:8.0
     env_file: .env

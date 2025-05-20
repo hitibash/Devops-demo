@@ -36,7 +36,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'ENV_DB_CRED', variable: 'ENV_FILE')]) {
                     sh '''
                         cp "$ENV_FILE" .env || exit 1
-                        docker compose up --build --abort-on-container-exit --exit-code-from web 
+                        docker compose up --build --abort-on-container-exit --exit-code-from test
                         docker compose down --volumes --remove-orphans
                     '''
                 }
