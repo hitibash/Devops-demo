@@ -12,11 +12,7 @@ services:
     working_dir: /app
     command: 
         sh -c "
-        echo '[WAIT] Waiting for DB to be ready...' &&
-        for i in {1..30}; do
-          mysql -h db -u app_user -p123456 -e 'SELECT 1;' todo_app && break;
-          echo '[WAIT] Attempt $i...'; sleep 2;
-        done &&
+        python wait_for_db.py &&
         echo '[RUNNING TESTS]' &&
         pytest tests/
       "
