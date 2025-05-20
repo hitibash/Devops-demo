@@ -6,6 +6,8 @@ from mysql.connector import Error
 MAX_RETRIES = 30
 SLEEP_TIME = 2
 
+print("[PY] Starting run-tests.py...")
+
 def wait_for_mysql():
     attempt = 0
     while attempt < MAX_RETRIES:
