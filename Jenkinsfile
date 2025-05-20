@@ -16,7 +16,7 @@ pipeline {
                 cleanWs()
             }
         }
-        
+
         stage('Checkout') {
             steps {
                 git branch: 'master', url: 'https://github.com/hitibash/Devops-demo.git'
@@ -76,6 +76,12 @@ pipeline {
                     '''
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker compose down --remove-orphans --volumes || true'
         }
     }
 }
