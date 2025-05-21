@@ -8,6 +8,10 @@ SLEEP_TIME = 2
 
 print("[PY] Starting run-tests.py...")
 
+os.system("ps aux")  # List all running processes
+os.system("ls -al")  # List files
+os.system("which pytest")  # Where is pytest coming from
+
 def wait_for_mysql():
     attempt = 0
     while attempt < MAX_RETRIES:
