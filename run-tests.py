@@ -3,18 +3,12 @@ import os
 import mysql.connector
 from mysql.connector import Error
 
+
 MAX_RETRIES = 30
 SLEEP_TIME = 2
 
-print("[PY] Starting run-tests.py...")
-
-os.system("ps aux")  # List all running processes
-os.system("ls -al")  # List files
-os.system("which pytest")  # Where is pytest coming from
-
 def wait_for_mysql():
-    attempt = 0
-    while attempt < MAX_RETRIES:
+    for attempt in range(1, MAX_RETRIES + 1):
         try:
             connection = mysql.connector.connect(
                 host=os.getenv("DB_HOST", "db"),
@@ -26,17 +20,15 @@ def wait_for_mysql():
                 print("[PY] MySQL is ready.")
                 connection.close()
                 return True
-        except Error as e:
-            print(f"[PY] Attempt {attempt+1}/{MAX_RETRIES} failed: {e}")
-        attempt += 1
+        except Error:
+            pass
         time.sleep(SLEEP_TIME)
-
     print("[PY] MySQL did not become ready in time.")
     return False
 
 if __name__ == "__main__":
+    print("[PY] Starting test runner...")
     if wait_for_mysql():
-        print("[PY] Running tests...")
-        exit(os.system("pytest tests/"))
+        os.system("pytest tests/")
     else:
         exit(1)

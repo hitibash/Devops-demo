@@ -12,13 +12,13 @@ services:
 
   test:
     build: .
-    entrypoint: ["python", "run-tests.py"]
     env_file: .env
     depends_on:
       - db
     volumes:
       - .:/app
     working_dir: /app
+    command: python -u run-tests.py
     restart: "no"
 
   db:
