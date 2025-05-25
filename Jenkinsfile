@@ -76,20 +76,23 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to K3s') {
+        stage('CD - Deploy to Kubernetes') {
             steps {
-                sh '''
-                    sed "s/__BUILD_NUMBER__/$BUILD_NUMBER/" k3s/deployment.template.yaml > k3s/deployment.yaml
-                    kubectl create configmap create-tables --from-file=sql/create_tables.sql --dry-run=client -o yaml | kubectl apply -f -
-                    kubectl apply -f k3s/secrets.yaml
-                    kubectl apply -f k3s/db_pvc.yaml
-                    kubectl apply -f k3s/db_deployment.yaml
-                    kubectl apply -f k3s/db_init_job.yaml
-                    kubectl apply -f k3s/deployment.yaml
-                    kubectl apply -f k3s/service.yaml
-                '''
+                withCredentials([string(credentialsId: 'k8s_mysql_secrets_yaml', variable: 'MYSQL_SECRET_YAML')]) {
+                    sh '''
+                        echo "$MYSQL_SECRET_YAML" > k3s/secrets.yaml
+                        sed "s/__BUILD_NUMBER__/$BUILD_NUMBER/" k3s/deployment.template.yaml > k3s/deployment.yaml
+
+                        kubectl apply -f k3s/secrets.yaml
+                        kubectl apply -f k3s/db_pvc.yaml
+                        kubectl apply -f k3s/db_deployment.yaml
+                        kubectl create configmap create-tables --from-file=sql/create_tables.sql --dry-run=client -o yaml | kubectl apply -f -
+                        kubectl apply -f k3s/db_init_job.yaml
+                        kubectl apply -f k3s/deployment.yaml
+                        kubectl apply -f k3s/service.yaml
+                    '''
+                }
             }
         }
-
     }
 }
