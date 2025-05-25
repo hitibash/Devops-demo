@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: flask-app
-        image: your-dockerhub-user/devops-demo:${BUILD_NUMBER}
+        image: hitibash/devops-demo:__BUILD_NUMBER__
         ports:
         - containerPort: 5000
         envFrom:

@@ -79,6 +79,7 @@ pipeline {
         stage('Deploy to K3s') {
             steps {
                 sh '''
+                    sed "s/__BUILD_NUMBER__/$BUILD_NUMBER/" k8s/deployment.template.yaml > k8s/deployment.yaml
                     kubectl apply -f k3s/configmap.yaml
                     kubectl apply -f k3s/deployment.yaml
                     kubectl apply -f k3s/service.yaml
