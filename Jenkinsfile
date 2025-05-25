@@ -79,7 +79,7 @@ pipeline {
 
         stage('CD - Deploy to Kubernetes') {
             steps {
-                withCredentials([string(credentialsId: 'k3s_mysql_secrets_yaml', variable: 'MYSQL_SECRET_YAML')]) {
+                withCredentials([file(credentialsId: 'k3s_mysql_secrets_yaml', variable: 'MYSQL_SECRET_YAML')]) {
                     sh '''
 cp "$MYSQL_SECRET_FILE" k3s/secrets.yaml
 sed "s/__BUILD_NUMBER__/$BUILD_NUMBER/" k3s/deployment.template.yaml > k3s/deployment.yaml
