@@ -79,9 +79,9 @@ pipeline {
         stage('Deploy to K3s') {
             steps {
                 sh '''
-                    kubectl apply -f k8s/configmap.yaml
-                    kubectl apply -f k8s/deployment.yaml
-                    kubectl apply -f k8s/service.yaml
+                    kubectl apply -f k3s/configmap.yaml
+                    kubectl apply -f k3s/deployment.yaml
+                    kubectl apply -f k3s/service.yaml
                 '''
             }
         }
