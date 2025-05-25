@@ -6,15 +6,18 @@ spec:
   template:
     spec:
       containers:
-        - name: init
-          image: mysql:8
+        - name: init-db
+          image: mysql:8.4
           command: ["/bin/sh", "-c"]
           args:
             - |
-              echo "Waiting for MySQL...";
-              until mysqladmin ping -h mysql --silent; do sleep 2; done;
-              echo "Running init script...";
-              mysql -h mysql -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < /init/create_tables.sql
+              until mysql -h $MYSQL_HOST -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e "SELECT 1"; do
+                echo "Waiting for MySQL...";
+                sleep 2;
+              done
+              echo "Connected to MySQL. Applying schema..."
+              mysql -h $MYSQL_HOST -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < /init/create_tables.sql
+              echo "Schema applied."
           env:
             - name: MYSQL_USER
               valueFrom:
@@ -31,11 +34,14 @@ spec:
                 secretKeyRef:
                   name: mysql-secret
                   key: MYSQL_DATABASE
+            - name: MYSQL_HOST
+              value: "mysql"  
           volumeMounts:
-            - name: init-script
+            - name: sql-script
               mountPath: /init
+              readOnly: true
+      restartPolicy: OnFailure
       volumes:
-        - name: init-script
+        - name: sql-script
           configMap:
             name: create-tables
-      restartPolicy: OnFailure
