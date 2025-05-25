@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-init
+spec:
+  template:
+    spec:
+      containers:
+        - name: init
+          image: mysql:8
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              echo "Waiting for MySQL...";
+              until mysqladmin ping -h mysql --silent; do sleep 2; done;
+              echo "Running init script...";
+              mysql -h mysql -u$MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE < /init/create_tables.sql
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_DATABASE
+          volumeMounts:
+            - name: init-script
+              mountPath: /init
+      volumes:
+        - name: init-script
+          configMap:
+            name: create-tables
+      restartPolicy: OnFailure

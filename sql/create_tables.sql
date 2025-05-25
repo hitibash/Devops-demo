@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS todo_app;
 
 USE todo_app;
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     user_name VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE tasks (
+CREATE TABLE IF NOT EXISTS tasks (
     task_id INT AUTO_INCREMENT PRIMARY KEY,
     task_header VARCHAR(100) NOT NULL,
     task_description TEXT,
