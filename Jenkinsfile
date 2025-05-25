@@ -81,10 +81,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'k3s_mysql_secrets_yaml', variable: 'MYSQL_SECRET_YAML')]) {
                     sh '''
-cat <<EOF > k3s/secrets.yaml
-$MYSQL_SECRET_YAML
-EOF
-
+cp "$MYSQL_SECRET_FILE" k3s/secrets.yaml
 sed "s/__BUILD_NUMBER__/$BUILD_NUMBER/" k3s/deployment.template.yaml > k3s/deployment.yaml
 
 kubectl apply -f k3s/secrets.yaml
