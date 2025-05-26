@@ -20,20 +20,12 @@ spec:
               echo "Schema applied."
           env:
             - name: MYSQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_USER
+              value: "root"
             - name: MYSQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: mysql-secret
-                  key: MYSQL_PASSWORD
-            - name: MYSQL_DATABASE
-              valueFrom:
-                secretKeyRef:
-                  name: mysql-secret
-                  key: MYSQL_DATABASE
+                  key: MYSQL_ROOT_PASSWORD
             - name: MYSQL_HOST
               value: "mysql"  
           volumeMounts:
