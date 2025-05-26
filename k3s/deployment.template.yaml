@@ -17,6 +17,3 @@ spec:
         image: hitibash/devops-demo:__BUILD_NUMBER__
         ports:
         - containerPort: 5000
-        envFrom:
-        - configMapRef:
-            name: flask-config
