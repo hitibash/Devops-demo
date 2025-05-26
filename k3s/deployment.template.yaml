@@ -18,18 +18,27 @@ spec:
         ports:
         - containerPort: 5000
         env:
-        - name: DB_HOST
-          value: "mysql"
-        - name: DB_PORT
-          value: "3306"
-        - name: DB_NAME
-          value: "todo_app"
-        - name: DB_USER
+        - name: MYSQL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_HOST
+        - name: MYSQL_PORT
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_PORT
+        - name: MYSQL_DATABASE
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: MYSQL_DATABASE
+        - name: MYSQL_USER
           valueFrom:
             secretKeyRef:
               name: mysql-secret
               key: MYSQL_USER
-        - name: DB_PASSWORD
+        - name: MYSQL_PASSWORD
           valueFrom:
             secretKeyRef:
               name: mysql-secret
