@@ -89,6 +89,7 @@ kubectl apply -f k3s/db_pvc.yaml
 kubectl apply -f k3s/db_deployment.yaml
 kubectl apply -f k3s/db_service.yaml
 kubectl create configmap create-tables --from-file=sql/create_tables.sql --dry-run=client -o yaml | kubectl apply -f -
+kubectl delete job mysql-init --ignore-not-found=true
 kubectl apply -f k3s/db_init_job.yaml
 kubectl apply -f k3s/deployment.yaml
 kubectl apply -f k3s/service.yaml
