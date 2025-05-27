@@ -2,7 +2,7 @@
 
 This project follows best practices for managing sensitive configuration and secrets, with a clear separation between development and production environments.
 
-## 🔐 Secrets Handling
+##  Secrets Handling
 
 ### Development Environment
 
@@ -38,19 +38,19 @@ This project follows best practices for managing sensitive configuration and sec
 - These secrets are **mounted into pods as environment variables** using `env.valueFrom.secretKeyRef` in both the app deployment and the MySQL init job.
 - This approach prevents sensitive data from being exposed in logs or stored in container images.
 
-## ⚙️ Configuration Strategy
+## Configuration Strategy
 
 - **Application configuration** (like database host, port, etc.) is injected through environment variables, following [12-Factor App](https://12factor.net/config) principles.
 - The Flask app reads these values using `os.getenv(...)`, which allows for seamless switching between environments.
 
-## 🧪 CI/CD Integration
+##  CI/CD Integration
 
 - During CI/CD via Jenkins:
   - Secrets required for the build or tests are provided using Jenkins **credentials** or injected from securely stored secret files.
   - Sensitive values are not echoed in logs.
   - A placeholder `.env.test` or secret YAML is injected during the testing stage if required.
 
-## ✅ Summary
+##  Summary
 
 | Feature        | Development                          | Production / Kubernetes          |
 |----------------|--------------------------------------|----------------------------------|
