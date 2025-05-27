@@ -1,0 +1,5 @@
+# Prometheus default values used.
+# Installed via:
+# helm install prometheus prometheus-community/prometheus --namespace monitoring
+
+# No custom overrides were used in our setup.
