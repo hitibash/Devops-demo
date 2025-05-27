@@ -130,8 +130,12 @@ Depending on your Docker version:
   docker compose up --build
   ```
 
+- To use the app, open your browser and navigate to:
+  ```bash
+  http://<your-machines-ip>:5000
+  ```
+
 To tear down the setup:
-```bash
-docker-compose down -v  # or docker compose down -v
-```
-git status
+  ```bash
+  docker-compose down -v  # or docker compose down -v
+  ```
