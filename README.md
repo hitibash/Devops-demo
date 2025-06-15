@@ -9,8 +9,8 @@
 - [Monitoring](#monitoring)
 - [Secrets & Configuration](#secrets--configuration)
 - [Testing](#testing)
-- [Local Development](#local-development)
-- [Simulated Environments](#simulated-environments)
+- [Local Development && set-up](#local-development)
+
 
 ---
 

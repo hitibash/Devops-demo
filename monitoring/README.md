@@ -1,4 +1,3 @@
-
 # Monitoring Setup
 
 This folder contains all configurations needed to deploy monitoring tools for the DevOps Demo project using Helm.
@@ -23,43 +22,67 @@ monitoring/
 
 ## Installation
 
-1. **Create the monitoring namespace:**
-   ```bash
-   kubectl create namespace monitoring
-   ```
+### 1. Add Helm Repositories
 
-2. **Install Prometheus:**
-   ```bash
-   helm install prometheus prometheus-community/prometheus      --namespace monitoring      -f monitoring/prometheus-values.yaml
-   ```
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+```
 
-3. **Install Grafana:**
-   ```bash
-   helm install grafana grafana/grafana      --namespace monitoring      -f monitoring/grafana-values.yaml
-   ```
+### 2. Create the monitoring namespace:
 
-4. **Access Grafana:**
+```bash
+kubectl create namespace monitoring
+```
 
-   Grafana is exposed via NodePort. Run:
+### 3. Install Prometheus:
 
-   ```bash
-   kubectl get svc -n monitoring
-   ```
 
-   Find the NodePort for `grafana` and visit `http://<YOUR_NODE_IP>:<NODE_PORT>` in your browser.
+Install with default values:
 
-5. **Import Dashboard:**
+```bash
+helm install prometheus prometheus-community/prometheus \
+  --namespace monitoring
+```
 
-   In Grafana, go to **Dashboards → Import** and upload `node-exporter-full.json` from the `dashboards/` folder.
+### 4. Install Grafana:
+
+With defaults:
+
+```bash
+helm install grafana grafana/grafana \
+  --namespace monitoring
+```
+
+### 5. Access Grafana:
+
+Grafana is exposed via NodePort. Run:
+
+```bash
+kubectl get svc -n monitoring
+```
+
+Find the NodePort for Grafana and visit:  
+`http://<YOUR_NODE_IP>:<NODE_PORT>` in your browser.
+
+### 6. Import Dashboard:
+
+In Grafana, go to:  
+**Dashboards → Import** and upload `node-exporter-full.json` from the `dashboards/` folder.
+
+---
 
 ## Note on Application-Level Monitoring
 
-This setup provides infrastructure-level metrics (CPU, memory, etc.). For **application-level metrics** (e.g., request rate, response time, error counts), it is recommanded to integrate tools like:
+This setup provides **infrastructure-level metrics** (CPU, memory, etc.).
 
-- Flask with Prometheus client (`prometheus_client`)
-- Custom `/metrics` endpoint in the Flask app
+For **application-level monitoring** (e.g., request rate, response time, error counts), it is recommended to integrate:
 
-We avoided this in the current setup to keep the application code untouched. However, it can be added in future improvements.
+- Flask with `prometheus_client`
+- A custom `/metrics` endpoint in the Flask app
+
+> I avoided this in the current setup to keep the application code untouched. However, it can be added in future improvements.
 
 ---
 
