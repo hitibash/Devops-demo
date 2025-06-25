@@ -8,6 +8,7 @@ pipeline {
     environment {
         IMAGE_NAME = "hitibash/devops-demo"
         DOCKER_CREDENTIALS_ID = 'dockerhub-creds'
+        KUBECONFIG = '/var/lib/jenkins/.kube/config'
     }
 
     stages {
